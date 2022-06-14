@@ -1,0 +1,12 @@
+token.txt
+*firebase-adminsdk*
+node_modules
+users.js
+awards/namesBackup kit109.json
+awards/namesBackup kit305.json
+.vscode/sftp.json
+.vscode/sftp.json
+~*.docx
+~*.tmp
+.DS_Store
+.vscode/sftp.json
