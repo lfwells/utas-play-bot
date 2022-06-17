@@ -486,7 +486,7 @@ async function doRoomControlsCommand(interaction)
 async function doRoomControlsButtons(interaction)
 {
     //await interaction.deferReply({ ephemeral: false });
-    //await interaction.deleteReply();
+    await interaction.deferUpdate();
     
     var roomDetails = await getRoomForCurrentChannel(interaction, true);
     if (!roomDetails) return;
@@ -497,6 +497,7 @@ async function doRoomControlsButtons(interaction)
         return await interaction.reply({ content: `You don't have permission to change this room.` });
     }
 
+    console.log("customId", interaction.customId);
     switch (interaction.customId)
     {
         default:
@@ -516,6 +517,8 @@ async function doRoomControlsButtons(interaction)
             await setRoomStatus(roomDetails, emoji_away);
             break;
     }
+
+    //await interaction.editReply({content:"wtf"});
 
     //await interaction.editReply({ content: `Room status for ${voiceChannel.name} set to ${roomDetails.status} ${statusDescriptions[roomDetails.status]}` });
     await createRoomControls(interaction, roomDetails, true);
@@ -571,10 +574,13 @@ async function createRoomControls(interaction, roomDetails, button)
 
     if (button)
     {
-        await interaction.update(content);
+        console.log("double yew tee eff?");
+        //await interaction.update(content);
+        await interaction.editReply(content);
     }
     else
     {
+        console.log("double yew tee eff? 222");
         await interaction.editReply(content);
     }
 }
@@ -1203,12 +1209,16 @@ async function channelLeave(member, channel)
         
         //check if the room is now empty, and put it to away
         var voiceChannel = await getVoiceChannelFor(roomDetails);
-        var roomMembersRemaining = 0;
-        await asyncForEach(voiceChannel.members, async function (m) 
+        var roomMembersRemaining = 0; 
+        var results = await asyncForEach(voiceChannel.members, async function (m) 
         {
-            roomMembersRemaining += (await isRoomMember(m, roomDetails, false)) ? 1 : 0;
-            //console.log({ roomMembersRemaining, name: m.displayName });
+            return (await isRoomMember(m, roomDetails, false)) ? 1 : 0;
         });
+        var roomMembersRemaining = results.reduce(
+            (previousValue, currentValue) => previousValue + currentValue,
+            0
+        );
+        console.log(roomMembersRemaining);
         if (roomMembersRemaining == 0)
         {
             console.log(`Room ${roomDetails.name} No team members remaining, switch to away!`);
