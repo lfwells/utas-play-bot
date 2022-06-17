@@ -246,7 +246,7 @@ export default async function(client)
             if (oldMember.channel && oldMember.channel != newMember.channel)
             {
                 //console.log("detect channel change!");
-                //await channelLeave(member, oldMember.channel);
+                await channelLeave(member, oldMember.channel);
                 await channelJoin(member, newMember.channel);
             }
             else if (oldMember.channel == undefined)
@@ -703,6 +703,8 @@ async function setRoomStatus(roomDetails, emoji)
     if (emoji != emoji_away)
         roomDetails.lastStatus = emoji;
 
+    await saveRoomDetails(roomDetails);
+
     await setNicknamesOfActiveMembers(roomDetails);
 
     var guild = await getGuildFor(roomDetails);
@@ -767,7 +769,7 @@ async function setRoomStatus(roomDetails, emoji)
     {
         if (await isRoomMember(nonMember, roomDetails, true) == false)
         {
-            console.log(`found nonMember ${nonMember.displayName} in the room`);
+            //console.log(`found nonMember ${nonMember.displayName} in the room`);
             switch (emoji)
             {
                 case emoji_muted:
@@ -795,12 +797,12 @@ async function setNicknamesOfActiveMembers(roomDetails)
     {
         if (await isRoomMember(m, roomDetails, false))
         {
-            console.log(`found member ${m.displayName} in the room, change their nick!`);
+            //console.log(`found member ${m.displayName} in the room, change their nick!`);
             await setMemberStatus(m, emoji);
         }
         else
         {
-            console.log(`found NON-member ${m.displayName} in the room, change their nick!`);
+            //console.log(`found NON-member ${m.displayName} in the room, change their nick!`);
             await setMemberStatus(m, "");
         }
     });
@@ -883,7 +885,7 @@ async function getRoomForTextChannel(textChannel)
     {
         if (room.text == textChannel.id)
         {
-            console.log("found room for text channel -- "+room.name);
+            ///console.log("found room for text channel -- "+room.name);
             return room;
         }
     }
@@ -896,7 +898,7 @@ async function getRoomForVoiceChannel(voiceChannel)
     {
         if (room.voice == voiceChannel.id)
         {
-            console.log("found room for voice channel -- "+room.name);
+            //console.log("found room for voice channel -- "+room.name);
             return room;
         }
     }
@@ -909,7 +911,7 @@ async function getRoomForRole(role)
     {
         if (room.role == role.id)
         {
-            console.log("found room for role -- "+room.name);
+            //console.log("found room for role -- "+room.name);
             return room;
         }
     }
@@ -1202,8 +1204,10 @@ async function channelLeave(member, channel)
         //check if the room is now empty, and put it to away
         var voiceChannel = await getVoiceChannelFor(roomDetails);
         var roomMembersRemaining = 0;
-        await asyncForEach(voiceChannel.members, async function (m) {
-            roomMembersRemaining += (await isRoomMember(m, roomDetails)) ? 1 : 0;
+        await asyncForEach(voiceChannel.members, async function (m) 
+        {
+            roomMembersRemaining += (await isRoomMember(m, roomDetails, false)) ? 1 : 0;
+            //console.log({ roomMembersRemaining, name: m.displayName });
         });
         if (roomMembersRemaining == 0)
         {
@@ -1212,6 +1216,7 @@ async function channelLeave(member, channel)
             await setRoomStatus(roomDetails, emoji_away);
             await updateRoomStatusChannel(member.guild);
         }
+        //console.log({ roomMembersRemaining });
     }
 }
 
