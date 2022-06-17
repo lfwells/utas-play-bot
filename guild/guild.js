@@ -4,6 +4,7 @@ import { guildsCollection } from "../core/database.js";
 
 import { getClient } from "../core/client.js";
 import { unregisterAllCommandsIfNecessary } from "./commands.js";
+import { init_roles } from "../roles/roles.js";
 
 export var GUILD_CACHE = {}; //because querying the db every min is bad (cannot cache on node js firebase it seems)
 
@@ -27,6 +28,7 @@ export default async function init(client)
     
     //run the init functions
     //await init_invites(guild);
+    await init_roles(guild);
 
     console.log("Initialised Guild",guild.name, guild.id);
   })

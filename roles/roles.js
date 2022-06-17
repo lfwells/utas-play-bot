@@ -19,6 +19,8 @@ export async function getRoleByNameOrCreate(guild, name)
     var existingRole = getRoleByName(guild, name);
     if (existingRole) return existingRole;
 
+    console.log("Had to create a role called", name);
+
     //else create it
     var result = await guild.roles.create({
          name

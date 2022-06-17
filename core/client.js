@@ -17,8 +17,9 @@ const client = new Client({
 export function getClient() { return client };
 
 
-import { init_application_commands } from '../guild/commands.js';
+import { init_application_commands, init_interaction_cache } from '../guild/commands.js';
 import init_voice_events from "../voice/events.js";
+import init_role_events from "../roles/events.js";
 import { createOAuthLink } from './login.js';
 
 
@@ -29,8 +30,10 @@ export async function init_client(client)
     client.removeAllListeners();
 
 	//register the appropriate discord event listeners
+    console.log("Init Interaction Cache");      await init_interaction_cache(client);
     console.log("Init Application Commands...");await init_application_commands(client);
     console.log("Init Voice Events...");        await init_voice_events(client);
+    console.log("Init Role Events...");         await init_role_events(client);
     console.log("End init_client.");
 
     createOAuthLink();
