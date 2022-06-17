@@ -21,6 +21,7 @@ import { init_application_commands, init_interaction_cache } from '../guild/comm
 import init_voice_events from "../voice/events.js";
 import init_role_events from "../roles/events.js";
 import { createOAuthLink } from './login.js';
+import { init_events_client } from '../events/events.js';
 
 
 var activityInterval;
@@ -34,6 +35,7 @@ export async function init_client(client)
     console.log("Init Application Commands...");await init_application_commands(client);
     console.log("Init Voice Events...");        await init_voice_events(client);
     console.log("Init Role Events...");         await init_role_events(client);
+    console.log("Init Scheduled Events...");    await init_events_client(client);
     console.log("End init_client.");
 
     createOAuthLink();
