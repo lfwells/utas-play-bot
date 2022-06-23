@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import DiscordOauth2 from "discord-oauth2";
 import { oauth } from '../_oauthDiscord.js';
 
 const scope = ["identify", "guilds", "email"];
