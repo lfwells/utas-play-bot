@@ -10,3 +10,4 @@ awards/namesBackup kit305.json
 ~*.tmp
 .DS_Store
 .vscode/sftp.json
+*_oauth*.js

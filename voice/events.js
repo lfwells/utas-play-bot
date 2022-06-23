@@ -203,18 +203,21 @@ export default async function(client)
         }
         else if (interaction.isMessageComponent() && interaction.message.interaction)
         {
-            if (interaction.customId == "delete")
+            if (interaction.message.interaction.commandName != "role_select_message") //ugh
             {
-                await doDeleteRoomButton(interaction);
-            }
-            else if (interaction.customId == "cancel")
-            {
-                //TODO: this doesn't work lol
-                await doCancelButton(interaction);
-            }
-            else
-            {
-                await doRoomControlsButtons(interaction);
+                if (interaction.customId == "delete")
+                {
+                    await doDeleteRoomButton(interaction);
+                }
+                else if (interaction.customId == "cancel")
+                {
+                    //TODO: this doesn't work lol
+                    await doCancelButton(interaction);
+                }
+                else
+                {
+                    await doRoomControlsButtons(interaction);
+                }
             }
         }
     });
