@@ -3,11 +3,6 @@ import DiscordOauth2 from "discord-oauth2";
 
 const scope = ["identify", "guilds", "email"];
 
-export const oauth = new DiscordOauth2({
-	clientId: "978162562468282378",
-	clientSecret: "rAAZq3MS1C2m8ZtOcLLdhKbt-zF2U29A",
-	redirectUri: "http://131.217.172.176/loginComplete", 
-});
 
 export async function createOAuthLink()
 {
